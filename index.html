@@ -1,0 +1,451 @@
+<title>MixCoffee 咖啡選豆單</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap">
+<style>
+/* Layout: a café menu board — paper card, sections in two columns on wide screens, dotted leaders from name to price */
+:root{
+  --paper:#f2efe6; --card:#fbfaf5; --ink:#24302a; --muted:#66706a; --rule:#c9c6b8;
+  --cherry:#a33a2c; --leaf:#3f5d4c; --chip:#e6e3d6;
+  --f-display:"LXGW WenKai TC","Kaiti TC","STKaiti",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-num:"Fraunces",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#161b18; --card:#1d2420; --ink:#ebe8dc; --muted:#a2aaa4; --rule:#3a443e;
+  --cherry:#e2826f; --leaf:#9cc2ab; --chip:#28312c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#161b18; --card:#1d2420; --ink:#ebe8dc; --muted:#a2aaa4; --rule:#3a443e;
+  --cherry:#e2826f; --leaf:#9cc2ab; --chip:#28312c; color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{text-align:left;display:grid;gap:6px;padding-bottom:20px;border-bottom:2px solid var(--ink)}
+.brand{font-family:var(--f-num);font-weight:700;font-size:clamp(34px,7vw,58px);letter-spacing:.02em;line-height:1}
+.brand span{color:var(--cherry)}
+.sub{font-family:var(--f-display);font-size:20px}
+.meta{color:var(--muted);font-size:13px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;gap:8px;overflow-x:auto;padding:12px 0;border-bottom:1px solid var(--rule);scrollbar-width:none}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+nav a{flex:none;font-size:13px;color:var(--ink);text-decoration:none;background:var(--chip);padding:5px 12px;border-radius:999px}
+nav a:hover,nav a:focus-visible{background:var(--ink);color:var(--paper);outline:none}
+main{columns:2 460px;column-gap:40px;margin-top:28px}
+section{break-inside:avoid;margin-bottom:36px;scroll-margin-top:70px}
+.sec-h{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:6px}
+.sec-h h2{font-family:var(--f-display);font-size:26px;font-weight:700;margin:0;text-wrap:balance}
+.sec-h small{color:var(--muted);font-size:12px;letter-spacing:.06em}
+.note{color:var(--muted);font-size:13px;margin:4px 0 8px}
+.group{font-family:var(--f-display);color:var(--leaf);font-size:17px;margin:14px 0 2px}
+.item{padding:9px 0;border-bottom:1px dashed var(--rule);display:grid;gap:2px}
+.item:last-child{border-bottom:0}
+.row{display:flex;align-items:baseline;gap:8px}
+.name{font-weight:700;font-size:16px}
+.lead{flex:1;border-bottom:2px dotted var(--rule);transform:translateY(-4px);min-width:16px}
+.prices{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;font-variant-numeric:tabular-nums}
+.price{font-family:var(--f-num);font-weight:700;font-size:17px;white-space:nowrap}
+.price i{font-style:normal;font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--muted);margin-right:3px}
+.origin{color:var(--muted);font-size:13px}
+.flavor{color:var(--cherry);font-size:14px}
+.tag{font-size:11px;padding:1px 7px;border-radius:4px;border:1px solid currentColor;color:var(--leaf);white-space:nowrap;align-self:center}
+.out .name,.out .price{color:var(--muted);text-decoration:line-through}
+.out .tag{color:var(--cherry)}
+ol.how{margin:6px 0 0;padding-left:20px;font-size:13px;color:var(--muted)}
+footer{border-top:2px solid var(--ink);margin-top:12px;padding-top:14px;color:var(--muted);font-size:13px}
+@media (max-width:520px){.name{font-size:15px}.price{font-size:16px}.row{flex-wrap:wrap}.lead{display:none}.prices{margin-left:auto}}
+
+#pane-drip .rule{margin-top:20px;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;display:grid;gap:4px}
+#pane-drip .rule b{font-family:var(--f-display);font-size:18px}
+#pane-drip .rule ul{margin:0;padding-left:20px;color:var(--muted);font-size:14px}
+#pane-drip .cols{display:grid;grid-template-columns:repeat(3,52px);text-align:right;font-variant-numeric:tabular-nums;flex:none}
+#pane-drip .colh{display:flex;justify-content:flex-end;padding:2px 0 4px;border-bottom:1px solid var(--rule)}
+#pane-drip .colh .cols span{font-size:11px;color:var(--muted);line-height:1.3}
+#pane-drip .cols .price{font-size:16px}
+#pane-drip .cols .price:not(:first-child){font-weight:500;color:var(--muted)}
+#pane-drip .row .name{min-width:0}
+@media (max-width:520px){#pane-drip .cols{margin-left:auto;grid-template-columns:repeat(3,48px)}#pane-drip .row{flex-wrap:nowrap}}
+.tabs{display:flex;gap:8px;margin-top:16px}
+.tabs button{font:inherit;font-family:var(--f-display);font-size:18px;padding:8px 18px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.tabs button:focus-visible{outline:2px solid var(--cherry);outline-offset:2px}
+.pane[hidden]{display:none}
+.pane .intro{margin-top:16px;color:var(--muted);font-size:13px}
+
+.deal{display:inline-block;margin-left:10px;vertical-align:middle;font-family:var(--f-body);font-size:14px;font-weight:700;color:#fff;background:var(--cherry);padding:3px 10px;border-radius:999px}
+#bmenu{columns:1;max-width:560px}
+.howto{margin-top:12px;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px 16px;font-size:14px}
+.howto b{font-family:var(--f-display);font-size:17px}.howto ol{margin:4px 0 0;padding-left:20px;color:var(--muted)}
+.qtys{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:flex-end;margin-top:4px}
+.opt{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--rule);border-radius:999px;background:var(--card)}
+.qty button{width:34px;height:32px;border:0;background:transparent;color:var(--ink);font-size:18px;line-height:1;cursor:pointer;border-radius:999px}
+.qty button:hover{background:var(--chip)}.qty button:focus-visible{outline:2px solid var(--cherry);outline-offset:-2px}
+.qty input{width:40px;border:0;background:transparent;padding:0;margin:0;font-family:inherit;-moz-appearance:textfield;appearance:none;text-align:center;font-family:var(--f-num);font-weight:700;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+.qty.on{border-color:var(--cherry)}.qty.on input{color:var(--cherry)}.qty input{font-size:16px}.qty input:focus{outline:2px solid var(--cherry);outline-offset:2px;border-radius:4px;background:var(--card)}
+body{padding-bottom:84px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--ink);color:var(--paper);display:flex;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-left,0px)) calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(0,0,0,.15)}
+.bar .sum{flex:1;font-size:14px;line-height:1.3}.bar .sum b{font-family:var(--f-num);font-size:20px}
+.bar button,.btn{font:inherit;font-weight:700;border:0;border-radius:999px;padding:10px 22px;cursor:pointer;background:var(--cherry);color:#fff}
+.bar button:disabled{opacity:.4;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+a.btn,.btn.line{text-decoration:none;display:inline-block}
+.btn.line{background:var(--leaf);color:#fff;text-decoration:none;display:inline-block}
+.ok{font-size:16px;font-weight:700;color:var(--leaf);margin:0}
+dialog{border:0;border-radius:12px;padding:0;width:min(560px,94vw);max-height:92vh;background:var(--paper);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.dlg{padding:20px;display:grid;gap:14px}
+.dlg h2{font-family:var(--f-display);font-size:24px;margin:0;display:flex;justify-content:space-between;align-items:center}
+.dlg h2 button{font-size:22px;background:none;border:0;color:var(--muted);cursor:pointer;padding:4px 8px}
+.lines{display:grid;gap:6px;border-top:1px solid var(--ink);padding-top:8px}
+.ln{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:6px 0;border-bottom:1px dashed var(--rule);font-size:14px}
+.ln small{color:var(--muted);grid-column:1}.ln .amt{font-family:var(--f-num);font-weight:700;grid-row:1/3;grid-column:2;align-self:center}
+.tot{display:flex;justify-content:space-between;font-size:16px;font-weight:700}.tot b{font-family:var(--f-num);font-size:22px;color:var(--cherry)}
+.sub2{display:flex;justify-content:space-between;font-size:14px}.sub2 span:last-child{font-family:var(--f-num);font-weight:700}
+.free{color:var(--leaf);font-weight:700}
+.hint{font-size:12px;color:var(--muted);margin:0}
+form{display:grid;gap:10px}
+form label{display:grid;gap:4px;font-size:14px}
+form input,form textarea,form select{font:inherit;padding:9px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink)}
+form input:focus,form textarea:focus{outline:2px solid var(--leaf);outline-offset:0}
+.ship{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px}.ship label{display:flex;gap:6px;align-items:center}
+.err{color:var(--cherry);font-size:13px;margin:0;min-height:1em}
+.acts{display:flex;flex-wrap:wrap;gap:10px}
+textarea#otext{min-height:180px;font-size:13px;width:100%;box-sizing:border-box}
+[hidden]{display:none!important}
+.done{display:grid;gap:10px}
+.soc{margin-top:6px}.soc .btn{text-decoration:none;text-align:center;color:#fff;border:0}.soc .ig{background:#c13584}.soc .fb{background:#1877f2}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">MIX<span>COFFEE</span></div>
+    <div class="sub">線上點單</div>
+    <div class="howto"><b>怎麼點單</b><ol><li>在想要的品項按「＋」選數量</li><li>選好後按畫面下方的「結帳」</li><li>填收件資料，按「送出訂單」，最後再按「確認送出」就完成了</li></ol></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-menu" aria-controls="pane-menu" aria-selected="true">品項菜單</button>
+      <button role="tab" id="tab-drip" aria-controls="pane-drip" aria-selected="false">濾掛價目表</button>
+    </div>
+  </header>
+  <div class="pane" id="pane-menu" role="tabpanel" aria-labelledby="tab-menu">
+    <div class="intro">價格依 7-11 賣貨便賣場 2026-11-13 資料整理｜咖啡豆沒有特別標示的都是半磅裝</div>
+    <nav id="nav" aria-label="分類"></nav>
+    <main id="menu"></main>
+    <footer>※ 價格與庫存以賣場當下為準。劃線品項目前售完。</footer>
+  </div>
+  <div class="pane" id="pane-drip" role="tabpanel" aria-labelledby="tab-drip" hidden>
+    <main id="bmenu" class="boxes"></main>
+    <div class="intro">以下豆子都可以做成濾掛｜依 2026-11-02 賣場半磅價格計算</div>
+    <div class="rule"><b>買越多越便宜</b><ul><li>1～9 包：照單包價</li><li>10 包以上：每包再減 $5</li><li>50 包以上：每包再減 $10</li><li>可以混搭不同口味，合計滿 10 包、50 包就用該價格</li></ul></div>
+    <nav id="dnav" aria-label="濾掛分類"></nav>
+    <main id="dmenu"></main>
+    <footer>※ 價格以賣場當下為準。杜卡計劃系列不提供濾掛。</footer>
+  </div>
+</div>
+
+<script>
+const H="半磅",G="100g",S="60g";
+const MENU=[
+{id:"nov",t:"11 月新豆",items:[
+ {n:"玉環",f:"荔枝・紅茶・可可・蜂蜜",p:[[H,700]],tag:"新豆"},
+ {n:"玉環＋雙子座白 組合",o:"玉環半磅＋雙子座-白半磅",p:[["組",1200]]},
+ {n:"百花洛神材料包",p:[["包",500]]}]},
+{id:"wine",t:"熱紅酒材料包",items:[
+ {n:"粉紅酒－經典香料",p:[["包",150]],tag:"新品"},
+ {n:"粉紅酒－莓果",p:[["包",150]],tag:"新品"},
+ {n:"老闆隨心配",p:[["包",150]],tag:"新品"}]},
+{id:"oct",t:"10 月新豆",items:[
+ {n:"邱比特",o:"MIX 獨家配方",f:"草莓・百合花・草莓軟糖・莓果",p:[[H,700]]},
+ {n:"月老",o:"MIX 獨家配方",f:"桃花・桃子・蜂蜜",p:[[H,700]]},
+ {g:"藝伎系列"},
+ {n:"馬拉威藝伎",o:"艾茵赫特莊園 薇薇特南果 特殊品種 水洗",p:[[G,900],[H,1800]]},
+ {n:"傳奇藝伎 EI11",o:"艾茵赫特莊園 2026 競標批次 水洗",p:[[G,3000],[H,6000]],tag:"競標"},
+ {n:"洛斯馬莊園 藝妓",o:"瓜地馬拉 水洗 COE#W9 競標批次",p:[[G,1500],[H,3000]],tag:"COE"},
+ {n:"幸運女神莊園 藝妓",o:"瓜地馬拉 水洗 COE#W5 競標批次",p:[[G,1500],[H,3000]],tag:"COE"},
+ {g:"其他"},
+ {n:"桂花馬鞭草糖漿材料包",p:[["原價",400],["加購",350]]},
+ {n:"被窩－午安枕",p:[["個",390]]}]},
+{id:"rare",t:"稀有豆專區",keep:1,items:[
+ {n:"衣索比亞 杜卡計劃 套組",o:"西達馬 四支豆子各 60g",p:[["4 入",3000]]},
+ {n:"杜卡計劃 黎明之光",o:"拉瑪莊園 日曬 G1",p:[[S,540]]},
+ {n:"杜卡計劃 冰封神話",o:"達菈菈莊園 低溫厭氧日曬 276 小時 G1",p:[[S,720]]},
+ {n:"杜卡計劃 翡翠之星",o:"亞拉拉莊園 厭氧日曬 96 小時 極小豆 G1",p:[[S,810]]},
+ {n:"杜卡計劃 黑幕降臨",o:"亞拉拉莊園 暗房乾燥厭氧日曬 G1",p:[[S,1080]]},
+ {n:"阿爾鐵里 藝妓",o:"巴拿馬 波奎特 露西地塊 水洗 #240226",p:[[S,1800],[G,3000],[H,6000]]},
+ {n:"秘魯 SL09",o:"水洗 淺焙",f:"花香・蜂蜜",p:[[G,900],[H,1800]]}]},
+{id:"new",t:"新豆入庫",note:"2026-04-01 更新",items:[
+ {n:"艷夏花荔（新版）",f:"杏桃・葡萄・玫瑰・荔枝",p:[[H,800]]},
+ {n:"悟空",o:"衣索比亞 日曬",f:"藍莓・野莓・伯爵茶・蜂蜜",p:[[H,800]]},
+ {n:"三藏",o:"衣索比亞 水洗",f:"花香・伯爵・蜂蜜・柑橘",p:[[H,700]]},
+ {n:"荔枝花語",f:"荔枝・玫瑰・桃子",p:[[G,500],[H,1000]]},
+ {n:"玫瑰花語",f:"芒果・玫瑰・優格",p:[[G,500],[H,1000]]},
+ {n:"琴酒 日曬",f:"柳橙・桃子・琴酒",p:[[G,750],[H,1500]]},
+ {n:"琴酒 水洗",f:"柑橘・白桃・琴酒",p:[[G,750],[H,1500]]},
+ {n:"百香烏龍",o:"哥倫比亞 特殊處理",f:"烏龍茶・百香・橙花",p:[[G,500],[H,1000]]},
+ {n:"草莓軟糖",o:"哥倫比亞 特殊處理",f:"草莓軟糖・草本・花香",p:[[G,500],[H,1000]]},
+ {n:"葡萄軟糖",o:"哥倫比亞 特殊處理",f:"葡萄嗨啾・葡萄・莓果",p:[[G,500],[H,1000]]},
+ {n:"櫻桃軟糖",o:"哥倫比亞 特殊處理",f:"糖漬櫻桃・西瓜・蜂蜜・莓果",p:[[G,500],[H,1000]]},
+ {n:"夕張哈密瓜",f:"橘色果肉哈密瓜・哈密瓜聖代・花香",p:[[G,500],[H,1000]]},
+ {n:"艾文丹尼爾",o:"哥斯大黎加 藝妓 紅蜜",f:"花香・柑橘・桃子・蜂蜜",p:[[G,600],[H,1200]]},
+ {n:"白蘭地酒桶",o:"衣索比亞 特殊處理",f:"威士忌・白蘭地・可可・堅果",p:[[G,750],[H,1500]]},
+ {n:"雪莉酒桶",o:"哥倫比亞 特殊處理",f:"威士忌・可可・蜂蜜",p:[[G,750],[H,1200]]},
+ {n:"艾瑞莎",o:"衣索比亞 日曬",f:"花香・柑橘・莓果",p:[[H,600]]},
+ {n:"聖塔維尼",o:"衣索比亞 水洗",f:"花香・柑橘・蜂蜜・茶",p:[[H,600]]},
+ {n:"孔加",o:"衣索比亞 水洗",f:"花香・柑橘・香料茶",p:[[H,600]]}]},
+{id:"mix",t:"MIX 獨家精品配方豆",note:"只有 MIX 買得到、喝得到的配方，全部半磅裝",items:[
+ {n:"繆思女神",f:"草莓・玫瑰・白葡萄酒",p:[[H,500]]},
+ {n:"酒神祭",f:"花香・白蘭地・莓果",p:[[H,600]]},
+ {n:"倪克斯",f:"藍莓優格・柳橙・野莓",p:[[H,600]]},
+ {n:"桃太郎",f:"白桃・玫瑰・蜂蜜",p:[[H,600]],tag:"人氣"},
+ {n:"祝融",f:"菸草・煙燻莓果・可可",p:[[H,500]]},
+ {n:"狄蜜特",f:"焦糖蘋果・奶油蛋糕",p:[[H,500]]},
+ {n:"2026 冰釀配方",f:"茉莉・野薑花・可可",p:[[H,600]],tag:"人氣"},
+ {n:"加購冰釀玻璃瓶",o:"搭配冰釀配方使用更方便",p:[["個",50]]},
+ {n:"雙子座－白（淺）",f:"玉蘭花・夜來香・釋迦・山竹",p:[[H,600]],tag:"人氣"},
+ {n:"雙子座－黑（中）",f:"玉蘭花・夜來香・焦糖・奶油太妃糖",p:[[H,600]]},
+ {n:"留白義式",f:"烤堅果・莓果・紅糖",p:[[H,300]]},
+ {n:"阿緹蜜絲",f:"藍莓・百合・蜂蜜・莓果",p:[[H,700]]},
+ {n:"花月吟",f:"桂花・玫瑰・百香果・蜂蜜",p:[[G,600],[H,1200]]},
+ {n:"阿弗加朵",f:"香草冰淇淋・威士忌・可可・花香・桃子",p:[[G,600],[H,1200]]}]},
+{id:"brew",t:"咖啡快煮包",items:[
+ {n:"阿弗加朵 Affogato",f:"香草冰淇淋・威士忌・可可・花香・桃子",p:[["包",310]]},
+ {n:"阿緹蜜絲",f:"藍莓・百合・蜂蜜・莓果",p:[["包",185]]},
+ {n:"雙子座－白（淺）",f:"玉蘭花・夜來香・釋迦・山竹",p:[["包",160]]},
+ {n:"雙子座－黑（中）",f:"玉蘭花・夜來香・焦糖・奶油太妃糖",p:[["包",160]]},
+ {n:"六入大套組",o:"雙子白×2、雙子黑×2、阿弗加朵×1、阿緹蜜絲×1",p:[["組",1100]]},
+ {how:["準備冷水：冰／熱咖啡 1000–1200cc，濃縮冰咖啡 500–600cc","放入咖啡包，煮滾後轉小火滾 3 分鐘","關火靜置 3 分鐘即可飲用；冰咖啡放涼後冰冰箱，濃縮冰咖啡可直接加冰塊"]}]},
+
+{id:"tea",t:"好喝的台灣茶",note:"全部為青心烏龍品種",items:[
+ {n:"衫林溪炭焙老茶",o:"2015 年度｜重發酵、焙火 70–80%",p:[["4 兩",1200]]},
+ {n:"紅烏龍紅茶",o:"杉林溪大崙山｜全發酵、不焙火",p:[["4 兩",900]]},
+ {n:"球狀 蜜香東方美人茶",o:"杉林溪 7–8 月採｜重發酵、不焙火",p:[["4 兩",1000]]},
+ {n:"衫林溪高山茶",o:"10/28 採｜半生熟、6–7 分火",p:[["4 兩",1000]]},
+ {n:"大禹嶺高山茶",o:"大禹嶺北線｜輕發酵、不焙火",p:[["1 兩",250],["2 兩",500]]},
+ {n:"草坔高山茶",o:"杉林溪最高海拔忘憂森林｜輕發酵、不焙火",p:[["2 兩",450]]}]},
+{id:"syrup",t:"糖漿材料包",note:"同時購買其他商品，自動用加購價",items:[
+ {n:"青花椒紫蘇材料包",p:[["原價",450],["加購",400]]},
+ {n:"二種話梅材料包",p:[["原價",180],["加購",150]]},
+ {n:"玄米綠茶粉",o:"每包 50 公克",p:[["原價",180],["加購",150]]}]},
+{id:"gear",t:"咖啡器具用品",items:[
+ {n:"平衡錐",p:[["原價",350],["加購",300]]},
+ {n:"越南滴漏壺",p:[["個",150]]},
+ {n:"蛋糕濾紙",o:"50 入",p:[["包",120]]},
+ {n:"排檔桿",p:[["個",750]]}]},
+{id:"tee",t:"九週年紀念 T 恤",items:[
+ {n:"MIXCOFFEE 九週年紀念 T 恤",o:"M／L／XL／2XL｜限量，售完不補。穿來店裡，咖啡買一送一",p:[["件",628]],tag:"限量"}]},
+{id:"boss",t:"老闆隨機幫你配",note:"老闆隨機搭配，一次買多組會再隨機加贈",items:[
+ {n:"隨機 1000 元組合",p:[["組",1000]]},
+ {n:"隨機 2000 元組合",p:[["組",2000]]}]}
+];
+const BOXES=[{id:"drip",t:"隨機濾掛咖啡包",deal:"任選四盒 $1,200",note:"口味隨機出貨，可以選焙度；每盒十入。1～4 號可以任意混搭，每滿四盒自動算 $1,200",items:[
+ {n:"1 號－淺焙",p:[["盒",350]]},
+ {n:"2 號－中焙",p:[["盒",350]]},
+ {n:"3 號－深焙",p:[["盒",350]]},
+ {n:"4 號－綜合",o:"三種焙度＋獨家配方",p:[["盒",350]]}]}];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>"$"+n.toLocaleString("en-US");
+const CAT={};
+const stepper=k=>`<span class="qty" data-k="${k}"><button type="button" class="dec" aria-label="減少">−</button><input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" value="0" aria-label="數量"><button type="button" class="inc" aria-label="增加">＋</button></span>`;
+function qtyRow(opts){opts.forEach(o=>CAT[o.k]=o);return `<div class="qtys">${opts.map(o=>`<span class="opt">${esc(o.l)}${stepper(o.k)}</span>`).join("")}</div>`}
+document.getElementById("nav").innerHTML=MENU.map(s=>`<a href="#${s.id}">${esc(s.t)}</a>`).join("");
+const secHTML=s=>`
+<section id="${s.id}">
+  <div class="sec-h"><h2>${esc(s.t)}${s.deal?`<span class="deal">${esc(s.deal)}</span>`:""}</h2></div>
+  ${s.note?`<p class="note">${esc(s.note)}</p>`:""}
+  ${s.items.map((it,i)=>{
+    if(it.g) return `<div class="group">${esc(it.g)}</div>`;
+    if(it.how) return `<div class="item"><div class="origin">沖煮方式</div><ol class="how">${it.how.map(h=>`<li>${esc(h)}</li>`).join("")}</ol></div>`;
+    const tag=it.out?"售完":it.tag;
+    return `<div class="item${it.out?" out":""}">
+      <div class="row"><span class="name">${esc(it.n)}</span>${tag?`<span class="tag">${esc(tag)}</span>`:""}<span class="lead"></span>
+      <span class="prices">${it.p.map(([l,v])=>`<span class="price"><i>${esc(l)}</i>${fmt(v)}</span>`).join("")}</span></div>
+      ${it.out?"":(()=>{const ad=it.p.find(([l])=>l==="加購"),og=it.p.find(([l])=>l==="原價");return ad&&og?qtyRow([{k:"m|"+s.id+"|"+i+"|a",sec:s.t,n:it.n,l:"",v:og[1],add:ad[1]}]):qtyRow(it.p.map(([l,v],j)=>({k:"m|"+s.id+"|"+i+"|"+j,sec:s.t,n:it.n,l,v,box:s.id==="drip"?1:0})))})()}
+      ${it.o?`<div class="origin">${esc(it.o)}</div>`:""}
+      ${it.f?`<div class="flavor">${esc(it.f)}</div>`:""}
+    </div>`}).join("")}
+</section>`;
+document.getElementById("menu").innerHTML=MENU.map(secHTML).join("");
+document.getElementById("bmenu").innerHTML=BOXES.map(secHTML).join("");
+
+const DRIP=[{"id":"nov","t":"11 月新豆","items":[{"n":"玉環","d":[55,50,45],"f":"荔枝・紅茶・可可・蜂蜜"}]},
+{"id":"oct","t":"10 月新豆","items":[{"n":"邱比特","d":[55,50,45],"f":"草莓・百合花・草莓軟糖・莓果"},
+ {"n":"月老","d":[55,50,45],"f":"桃花・桃子・蜂蜜"},
+ {"n":"馬拉威藝伎","d":[110,105,100],"o":"艾茵赫特莊園 薇薇特南果 特殊品種 水洗"},
+ {"n":"傳奇藝伎 EI11","d":[320,315,310],"o":"艾茵赫特莊園 2026 競標批次 水洗","tag":"競標"},
+ {"n":"洛斯馬莊園 藝妓","d":[170,165,160],"o":"瓜地馬拉 水洗 COE#W9 競標批次","tag":"COE"},
+ {"n":"幸運女神莊園 藝妓","d":[170,165,160],"o":"瓜地馬拉 水洗 COE#W5 競標批次","tag":"COE"}]},
+{"id":"rare","t":"稀有豆專區","items":[{"n":"阿爾鐵里 藝妓","d":[320,315,310],"o":"巴拿馬 波奎特 露西地塊 水洗 #240226"},
+ {"n":"秘魯 SL09","d":[110,105,100],"f":"花香・蜂蜜"}]},
+{"id":"new","t":"新豆入庫","items":[{"n":"艷夏花荔（新版）","d":[60,55,50],"f":"杏桃・葡萄・玫瑰・荔枝"},
+ {"n":"悟空","d":[60,55,50],"f":"藍莓・野莓・伯爵茶・蜂蜜"},
+ {"n":"三藏","d":[55,50,45],"f":"花香・伯爵・蜂蜜・柑橘"},
+ {"n":"荔枝花語","d":[70,65,60],"f":"荔枝・玫瑰・桃子"},
+ {"n":"玫瑰花語","d":[70,65,60],"f":"芒果・玫瑰・優格"},
+ {"n":"琴酒 日曬","d":[95,90,85],"f":"柳橙・桃子・琴酒"},
+ {"n":"琴酒 水洗","d":[95,90,85],"f":"柑橘・白桃・琴酒"},
+ {"n":"百香烏龍","d":[70,65,60],"f":"烏龍茶・百香・橙花"},
+ {"n":"草莓軟糖","d":[70,65,60],"f":"草莓軟糖・草本・花香"},
+ {"n":"葡萄軟糖","d":[70,65,60],"f":"葡萄嗨啾・葡萄・莓果"},
+ {"n":"櫻桃軟糖","d":[70,65,60],"f":"糖漬櫻桃・西瓜・蜂蜜・莓果"},
+ {"n":"夕張哈密瓜","d":[70,65,60],"f":"橘色果肉哈密瓜・哈密瓜聖代・花香"},
+ {"n":"艾文丹尼爾","d":[80,75,70],"f":"花香・柑橘・桃子・蜂蜜"},
+ {"n":"白蘭地酒桶","d":[95,90,85],"f":"威士忌・白蘭地・可可・堅果"},
+ {"n":"雪莉酒桶","d":[80,75,70],"f":"威士忌・可可・蜂蜜"},
+ {"n":"艾瑞莎","d":[50,45,40],"f":"花香・柑橘・莓果"},
+ {"n":"聖塔維尼","d":[50,45,40],"f":"花香・柑橘・蜂蜜・茶"},
+ {"n":"孔加","d":[50,45,40],"f":"花香・柑橘・香料茶"}]},
+{"id":"mix","t":"MIX 獨家精品配方豆","items":[{"n":"繆思女神","d":[45,40,35],"f":"草莓・玫瑰・白葡萄酒"},
+ {"n":"酒神祭","d":[50,45,40],"f":"花香・白蘭地・莓果"},
+ {"n":"倪克斯","d":[50,45,40],"f":"藍莓優格・柳橙・野莓"},
+ {"n":"桃太郎","d":[50,45,40],"f":"白桃・玫瑰・蜂蜜","tag":"人氣"},
+ {"n":"祝融","d":[45,40,35],"f":"菸草・煙燻莓果・可可"},
+ {"n":"狄蜜特","d":[45,40,35],"f":"焦糖蘋果・奶油蛋糕"},
+ {"n":"2026 冰釀配方","d":[50,45,40],"f":"茉莉・野薑花・可可","tag":"人氣"},
+ {"n":"雙子座－白（淺）","d":[50,45,40],"f":"玉蘭花・夜來香・釋迦・山竹","tag":"人氣"},
+ {"n":"雙子座－黑（中）","d":[50,45,40],"f":"玉蘭花・夜來香・焦糖・奶油太妃糖"},
+ {"n":"留白義式","d":[35,30,25],"f":"烤堅果・莓果・紅糖"},
+ {"n":"阿緹蜜絲","d":[55,50,45],"f":"藍莓・百合・蜂蜜・莓果"},
+ {"n":"花月吟","d":[80,75,70],"f":"桂花・玫瑰・百香果・蜂蜜"},
+ {"n":"阿弗加朵","d":[80,75,70],"f":"香草冰淇淋・威士忌・可可・花香・桃子"}]}];
+const esc2=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const COLH='<div class="colh"><div class="cols"><span>1–9 包</span><span>10 包↑</span><span>50 包↑</span></div></div>';
+const itemHTML=(it,k,s)=>'<div class="item"><div class="row"><span class="name">'+esc2(it.n)+'</span>'+(it.tag?'<span class="tag">'+esc2(it.tag)+'</span>':'')+'<span class="lead"></span><span class="cols">'+it.d.map(v=>'<span class="price">$'+v+'</span>').join("")+'</span></div>'+(it.f?'<div class="flavor">'+esc2(it.f)+'</div>':'')+(it.o?'<div class="origin">'+esc2(it.o)+'</div>':'')+qtyRow([{k,sec:'濾掛',n:it.n,l:'單包',d:it.d,drip:1}])+'</div>';
+const secHead=(s,cont)=>'<div class="sec-h"><h2>'+esc2(s.t)+(cont?'（續）':'')+'</h2></div>'+COLH;
+
+document.getElementById("dnav").innerHTML=DRIP.map(s=>'<a href="#d-'+s.id+'">'+esc2(s.t)+'</a>').join("");
+document.getElementById("dmenu").innerHTML=DRIP.map(s=>'<section id="d-'+s.id+'">'+secHead(s)+s.items.map((it,i)=>itemHTML(it,'d|'+s.id+'|'+i,s)).join("")+'</section>').join("");
+const tabs=[...document.querySelectorAll('[role=tab]')];
+function show(id,push){tabs.forEach(t=>{const on=t.id===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});if(push)history.replaceState(null,'',id==='tab-drip'?'#drip':'#menu');}
+tabs.forEach(t=>t.addEventListener('click',()=>{show(t.id,true);window.scrollTo({top:0})}));
+if(location.hash==='#drip'||location.hash.startsWith('#d-'))show('tab-drip');
+</script>
+<div class="bar" role="region" aria-label="購物車"><div class="sum" id="sum">還沒有選任何品項</div><button type="button" id="go" disabled>結帳</button></div>
+<dialog id="dlg" aria-labelledby="dlg-h"><div class="dlg">
+  <h2 id="dlg-h">確認訂單 <button type="button" id="x" aria-label="關閉">×</button></h2>
+  <div class="lines" id="lines"></div>
+  <div class="sub2"><span>商品合計</span><span id="tot"></span></div>
+  <div class="sub2"><span id="shipL">運費</span><span id="shipV"></span></div>
+  <div class="tot"><span>應付金額</span><b id="grand"></b></div>
+  <p class="hint">※ 商品滿 $1,000 免運；未滿 $1,000 宅配運費 $80、7-11 取貨運費 $60；海外運費另計，送出後請複製訂單私訊我們的 IG 或臉書，我們會幫你計算運費並確認能不能寄送。濾掛可混搭，合計滿 10 包、50 包會自動用優惠價。有標「加購」的品項，同時購買其他商品就會自動用加購價；只買加購品項時，折扣最多的一樣用加購價。</p>
+  <form id="f" novalidate>
+    <label>姓名 <input name="name" autocomplete="name" required></label>
+    <label>電話 <input name="tel" type="tel" autocomplete="tel" inputmode="tel" required></label>
+    <div class="ship" role="radiogroup" aria-label="取貨方式">取貨方式：
+      <label><input type="radio" name="ship" value="宅配" checked> 宅配</label>
+      <label><input type="radio" name="ship" value="7-11 取貨"> 7-11 取貨</label>
+      <label><input type="radio" name="ship" value="海外"> 海外</label></div>
+    <div id="osHint" hidden><p class="hint">※ 海外寄送運費另計：送出訂單後，請按「複製訂單」，再按下面的按鈕私訊我們的 IG 或臉書，我們會幫你計算運費並確認能不能寄送。</p><div class="acts soc"><a class="btn ig" href="https://www.instagram.com/mixcoffee0628/" target="_blank" rel="noopener">私訊 IG</a><a class="btn fb" href="https://m.me/MIXCoffeeMIXCoffee" target="_blank" rel="noopener">私訊臉書</a></div></div>
+    <label id="addrL"><span id="addrT">收件地址</span> <input name="addr" autocomplete="street-address"></label>
+    <label id="storeL" hidden>7-11 門市名稱 <input name="store" placeholder="例如：仁愛門市"></label>
+    <label>備註（T 恤尺寸、濾掛焙度、想說的話）<textarea name="note" rows="2"></textarea></label>
+    <p class="err" id="err" role="alert"></p>
+    <div class="acts"><button class="btn" type="submit" id="send">送出訂單</button><button class="btn ghost" type="button" id="clr">清空購物車</button></div>
+  </form>
+  <div class="done" id="done" hidden>
+    <p class="ok" id="okmsg"></p>
+    <p class="hint" id="okhint"></p>
+    <textarea id="otext" readonly aria-label="訂單內容"></textarea>
+    <div class="acts"><a class="btn" id="fb" rel="noopener" hidden>確認送出</a><button class="btn ghost" type="button" id="cp">複製訂單</button><button class="btn ghost" type="button" id="back">返回修改</button><button class="btn" type="button" id="fin" hidden>完成</button></div>
+    <div id="osSoc" hidden><div class="acts soc"><a class="btn ig" href="https://www.instagram.com/mixcoffee0628/" target="_blank" rel="noopener">私訊 IG</a><a class="btn fb" href="https://m.me/MIXCoffeeMIXCoffee" target="_blank" rel="noopener">私訊臉書</a></div></div>
+  </div>
+</div>
+</div></dialog>
+<script>
+const cart={};
+try{Object.assign(cart,JSON.parse(localStorage.getItem("mixB-cart3")||"{}"))}catch(e){}
+for(const k in cart)if(!CAT[k]||!(cart[k]>0))delete cart[k];
+const save=()=>{try{localStorage.setItem("mixB-cart3",JSON.stringify(cart))}catch(e){}};
+function lines(){
+  const dripN=Object.keys(cart).filter(k=>CAT[k].drip).reduce((a,k)=>a+cart[k],0);
+  const tier=dripN>=50?2:dripN>=10?1:0;
+  const base=Object.keys(cart).some(k=>cart[k]>0&&!CAT[k].add);
+  const adds=Object.keys(CAT).filter(k=>cart[k]>0&&CAT[k].add);
+  const pick=!base&&adds.length>=2?adds.reduce((a,k)=>CAT[k].v-CAT[k].add>CAT[a].v-CAT[a].add?k:a):null;
+  const isAdd=k=>CAT[k].add&&(base||k===pick);
+  return Object.keys(CAT).filter(k=>cart[k]>0).map(k=>{const c=CAT[k],q=cart[k],v=c.drip?c.d[tier]:isAdd(k)?c.add:c.v;return {c,q,v,sub:q*v,lb:isAdd(k)?"加購價":c.l}});
+}
+function boxDeal(L){const b=L.filter(x=>x.c.box).reduce((a,x)=>a+x.q,0),g=Math.floor(b/4);return {g,off:g*(4*350-1200)}}
+const FREE=1000,SHIPFEE={"宅配":80,"7-11 取貨":60};
+function shipOf(t){const fm=document.getElementById("f"),w=fm&&fm.ship?fm.ship.value:"宅配";return {w,os:w==="海外",fee:w==="海外"||t>=FREE?0:SHIPFEE[w]}}
+function refresh(){
+  document.querySelectorAll(".qty").forEach(el=>{const q=cart[el.dataset.k]||0;const inp=el.querySelector("input");if(document.activeElement!==inp)inp.value=q;el.classList.toggle("on",q>0)});
+  const L=lines(),n=L.reduce((a,x)=>a+x.q,0),bd=boxDeal(L),t=L.reduce((a,x)=>a+x.sub,0)-bd.off;
+  document.getElementById("sum").innerHTML=n?`共 ${n} 件　<b>${fmt(t)}</b><br><small class="${t>=FREE?"free":""}">${t>=FREE?"已達免運":"再買 "+fmt(FREE-t)+" 免運"}</small>`:"還沒有選任何品項";
+  document.getElementById("go").disabled=!n;
+  document.getElementById("lines").innerHTML=L.map(x=>`<div class="ln"><span>${esc(x.c.n)}${x.lb?"（"+esc(x.lb)+"）":""}</span><span class="amt">${fmt(x.sub)}</span><small>${esc(x.c.sec)}｜${fmt(x.v)} × ${x.q}</small></div>`).join("")+(bd.g?`<div class="ln"><span>任選四盒優惠</span><span class="amt">−${fmt(bd.off)}</span><small>濾掛咖啡包每滿四盒 $1,200｜共 ${bd.g} 組</small></div>`:"");
+  document.getElementById("tot").textContent=fmt(t);
+  const sp=shipOf(t);document.getElementById("shipL").textContent="運費（"+sp.w+"）";
+  document.getElementById("shipV").textContent=sp.os?"另計":sp.fee?fmt(sp.fee):"免運";
+  document.getElementById("grand").textContent=fmt(t+sp.fee)+(sp.os?"＋運費":"");
+  return {L,n,t,bd,sp};
+}
+const setQ=(k,q)=>{q=Math.max(0,Math.min(999,q|0));if(q)cart[k]=q;else delete cart[k];save();refresh()};
+let justF=null;
+document.addEventListener("focusin",e=>{if(e.target.matches(".qty input")){justF=e.target;e.target.select()}});
+document.addEventListener("mouseup",e=>{if(e.target===justF){e.preventDefault();justF.select()}justF=null});
+document.addEventListener("input",e=>{const t=e.target;if(!t.matches(".qty input"))return;t.value=t.value.replace(/\D/g,"").slice(0,3);setQ(t.parentElement.dataset.k,+t.value||0)});
+document.addEventListener("focusout",e=>{const t=e.target;if(t.matches(".qty input"))t.value=cart[t.parentElement.dataset.k]||0});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.matches(".qty input"))e.target.blur()});
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".qty button");if(!b)return;
+  const k=b.parentElement.dataset.k;let q=(cart[k]||0)+(b.classList.contains("inc")?1:-1);
+  if(q<=0)delete cart[k];else cart[k]=Math.min(q,999);
+  save();refresh();
+});
+const dlg=document.getElementById("dlg"),f=document.getElementById("f"),done=document.getElementById("done");
+function openDlg(){f.hidden=false;done.hidden=true;document.getElementById("err").textContent="";refresh();dlg.showModal()}
+document.getElementById("go").onclick=openDlg;
+document.getElementById("x").onclick=()=>dlg.close();
+dlg.addEventListener("close",refresh);
+document.getElementById("back").onclick=()=>{f.hidden=false;done.hidden=true};
+document.getElementById("clr").onclick=()=>{if(confirm("確定要清空購物車嗎？")){for(const k in cart)delete cart[k];save();refresh();dlg.close()}};
+f.addEventListener("change",e=>{if(e.target.name==="ship"){const o=f.ship.value==="海外",s=f.ship.value!=="7-11 取貨";document.getElementById("osHint").hidden=!o;document.getElementById("addrT").textContent=o?"海外收件地址（請寫國家、城市）":"收件地址";document.getElementById("addrL").hidden=!s;document.getElementById("storeL").hidden=s;refresh()}});
+const GF="https://docs.google.com/forms/d/e/1FAIpQLSe52482c-zq3vtO_F4IGhtEyVuyNz2WiSMJzzYLGdcfrbaLoA/";
+const GE={no:"entry.544385471",name:"entry.2077284908",tel:"entry.448016428",ship:"entry.549425062",place:"entry.280828603",items:"entry.1736877444",total:"entry.565855888"};
+f.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const v=k=>(f[k].value||"").trim(),err=document.getElementById("err");
+  const ship=f.ship.value,place=ship==="7-11 取貨"?v("store"):v("addr");
+  err.textContent="";
+  if(!v("name"))return err.textContent="請填寫姓名";
+  if(!/^[0-9+\-\s()]{8,}$/.test(v("tel")))return err.textContent="請填寫正確的電話";
+  if(!place)return err.textContent=ship==="7-11 取貨"?"請填寫 7-11 門市名稱":"請填寫收件地址";
+  const {L,n,t,bd,sp}=refresh();if(!n)return err.textContent="購物車是空的";
+  const d=new Date(),p=x=>String(x).padStart(2,"0");
+  const no="MIX"+p(d.getMonth()+1)+p(d.getDate())+"-"+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds());
+  const items=L.map(x=>`・${x.c.sec}／${x.c.n}${x.lb?"（"+x.lb+"）":""}${fmt(x.v)} × ${x.q} = ${fmt(x.sub)}`).join("\n")+(bd.g?`\n・任選四盒優惠（${bd.g} 組）−${fmt(bd.off)}`:"")+(v("note")?"\n\n備註："+v("note"):"");
+  const total=sp.os?`${fmt(t)}＋海外運費另計（商品 ${fmt(t)}，共 ${n} 件，運費待確認）`:`${fmt(t+sp.fee)}（商品 ${fmt(t)}＋運費 ${sp.fee?fmt(sp.fee):"免運"}，共 ${n} 件）`;
+  const txt=["【MixCoffee 訂單】"+no,"",items,"","應付金額："+total,"","姓名："+v("name"),"電話："+v("tel"),"取貨方式："+ship,(ship==="7-11 取貨"?"門市：":"地址：")+place].join("\n");
+  const data=new URLSearchParams();
+  [["no",no],["name",v("name")],["tel",v("tel")],["ship",ship],["place",place],["items",items],["total",total]].forEach(([k,x])=>data.append(GE[k],x));
+  const btn=document.getElementById("send");btn.disabled=true;btn.textContent="傳送中…";
+  let sent=false;
+  try{await fetch(GF+"formResponse",{method:"POST",mode:"no-cors",body:data});sent=true}catch(x){}
+  btn.disabled=false;btn.textContent="送出訂單";
+  document.getElementById("otext").value=txt;
+  const fb=document.getElementById("fb");
+  const finish=()=>{
+    document.getElementById("okmsg").textContent="訂單已送出！訂單編號 "+no;
+    document.getElementById("okhint").textContent=sp.os?"海外寄送運費另計：請先按「複製訂單」，再按「私訊 IG」或「私訊臉書」，把訂單貼上傳給我們，我們會幫你計算運費並確認能不能寄送。":"謝謝你的訂購，我們確認訂單後會跟你聯絡付款方式。建議把下面的訂單內容截圖留存。";
+    fb.hidden=true;document.getElementById("back").hidden=true;document.getElementById("fin").hidden=false;
+    document.getElementById("osSoc").hidden=!sp.os;
+    for(const k in cart)delete cart[k];save();refresh();
+  };
+  if(sent)finish();
+  else{
+    document.getElementById("okmsg").textContent="最後一步！";
+    document.getElementById("okhint").textContent="請確認下面的訂單內容沒問題，再按「確認送出」。會另外開啟 Google 的頁面，看到「已記錄你的回應」就完成下單了。";
+    data.append("submit","Submit");fb.href=GF+"formResponse?"+data.toString();
+    fb.onclick=()=>setTimeout(finish,300);
+    fb.hidden=false;document.getElementById("back").hidden=false;document.getElementById("fin").hidden=true;
+    document.getElementById("osSoc").hidden=true;
+  }
+  f.hidden=true;done.hidden=false;
+});
+document.getElementById("fin").onclick=()=>{dlg.close();f.reset();document.getElementById("addrL").hidden=false;document.getElementById("storeL").hidden=true;document.getElementById("osHint").hidden=true;document.getElementById("addrT").textContent="收件地址";refresh();scrollTo(0,0)};
+document.getElementById("cp").onclick=async e=>{
+  const ta=document.getElementById("otext");let ok=false;
+  try{await navigator.clipboard.writeText(ta.value);ok=true}catch(x){ta.select();try{ok=document.execCommand("copy")}catch(y){}}
+  e.target.textContent=ok?"已複製":"請長按文字自行複製";setTimeout(()=>e.target.textContent="複製訂單",2000);
+};
+refresh();
+</script>
+
