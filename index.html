@@ -328,7 +328,7 @@ if(location.hash==='#drip'||location.hash.startsWith('#d-'))show('tab-drip');
   <div class="sub2"><span>商品合計</span><span id="tot"></span></div>
   <div class="sub2"><span id="shipL">運費</span><span id="shipV"></span></div>
   <div class="tot"><span>應付金額</span><b id="grand"></b></div>
-  <p class="hint">※ 商品滿 $1,000 免運；未滿 $1,000 宅配運費 $80、7-11 取貨運費 $60；海外運費另計，送出後請複製訂單私訊我們的 IG 或臉書，我們會幫你計算運費並確認能不能寄送。濾掛可混搭，合計滿 10 包、50 包會自動用優惠價。有標「加購」的品項，同時購買其他商品就會自動用加購價；只買加購品項時，折扣最多的一樣用加購價。</p>
+  <p class="hint">※ 國內運費：商品滿 $1,000 免運；未滿 $1,000 宅配運費 $80、7-11 取貨運費 $60；海外運費另計，送出後請複製訂單私訊我們的 IG 或臉書，我們會幫你計算運費並確認能不能寄送。濾掛可混搭，合計滿 10 包、50 包會自動用優惠價。有標「加購」的品項，同時購買其他商品就會自動用加購價；只買加購品項時，折扣最多的一樣用加購價。</p>
   <form id="f" novalidate>
     <label>姓名 <input name="name" autocomplete="name" required></label>
     <label>電話 <input name="tel" type="tel" autocomplete="tel" inputmode="tel" required></label>
@@ -372,7 +372,7 @@ function shipOf(t){const fm=document.getElementById("f"),w=fm&&fm.ship?fm.ship.v
 function refresh(){
   document.querySelectorAll(".qty").forEach(el=>{const q=cart[el.dataset.k]||0;const inp=el.querySelector("input");if(document.activeElement!==inp)inp.value=q;el.classList.toggle("on",q>0)});
   const L=lines(),n=L.reduce((a,x)=>a+x.q,0),bd=boxDeal(L),t=L.reduce((a,x)=>a+x.sub,0)-bd.off;
-  document.getElementById("sum").innerHTML=n?`共 ${n} 件　<b>${fmt(t)}</b><br><small class="${t>=FREE?"free":""}">${t>=FREE?"已達免運":"再買 "+fmt(FREE-t)+" 免運"}</small>`:"還沒有選任何品項";
+  document.getElementById("sum").innerHTML=n?`共 ${n} 件　<b>${fmt(t)}</b><br><small class="${t>=FREE?"free":""}">${t>=FREE?"已達國內免運":"再買 "+fmt(FREE-t)+" 國內免運"}</small>`:"還沒有選任何品項";
   document.getElementById("go").disabled=!n;
   document.getElementById("lines").innerHTML=L.map(x=>`<div class="ln"><span>${esc(x.c.n)}${x.lb?"（"+esc(x.lb)+"）":""}</span><span class="amt">${fmt(x.sub)}</span><small>${esc(x.c.sec)}｜${fmt(x.v)} × ${x.q}</small></div>`).join("")+(bd.g?`<div class="ln"><span>任選四盒優惠</span><span class="amt">−${fmt(bd.off)}</span><small>濾掛咖啡包每滿四盒 $1,200｜共 ${bd.g} 組</small></div>`:"");
   document.getElementById("tot").textContent=fmt(t);
