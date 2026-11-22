@@ -116,6 +116,14 @@ form input:focus,form textarea:focus{outline:2px solid var(--leaf);outline-offse
 textarea#otext{min-height:180px;font-size:13px;width:100%;box-sizing:border-box}
 [hidden]{display:none!important}
 .done{display:grid;gap:10px}
+.dlg.sent>.lines,.dlg.sent>.sub2,.dlg.sent>.tot,.dlg.sent>.hint{display:none}
+.okbox{display:grid;justify-items:center;text-align:center;gap:6px;padding:18px 12px;border-radius:12px;background:var(--card);border:2px solid var(--leaf)}
+.okicon{width:64px;height:64px;border-radius:50%;background:var(--leaf);color:#fff;font-size:38px;font-weight:700;display:grid;place-items:center}
+.okt{font-size:24px;font-weight:700;color:var(--leaf);margin:4px 0 0}
+.okbox p{margin:0}.okno{font-size:17px}.okno b{font-family:var(--f-num);letter-spacing:.5px}
+.okamt{font-size:15px;color:var(--muted)}.okamt b{font-family:var(--f-num);font-size:26px;color:var(--cherry)}
+.ok.warn{color:var(--cherry);font-size:20px}
+.okshot{margin-top:6px!important;font-size:14px;font-weight:700;background:var(--chip);border-radius:999px;padding:6px 14px}
 .soc{margin-top:6px}.soc .btn{text-decoration:none;text-align:center;color:#fff;border:0}.soc .ig{background:#c13584}.soc .fb{background:#1877f2}
 </style>
 
@@ -123,7 +131,7 @@ textarea#otext{min-height:180px;font-size:13px;width:100%;box-sizing:border-box}
   <header>
     <div class="brand">MIX<span>COFFEE</span></div>
     <div class="sub">線上點單</div>
-    <div class="howto"><b>怎麼點單</b><ol><li>在想要的品項按「＋」選數量</li><li>選好後按畫面下方的「結帳」</li><li>填收件資料，按「送出訂單」，最後再按「確認送出」就完成了</li></ol></div>
+    <div class="howto"><b>怎麼點單</b><ol><li>在想要的品項按「＋」選數量</li><li>選好後按畫面下方的「結帳」</li><li>填收件資料，按「送出訂單」，看到綠色的「訂單已送出成功！」就完成了（如果畫面出現紅色的「訂單還沒送出」，請再按「確認送出」）</li></ol></div>
     <div class="tabs" role="tablist">
       <button role="tab" id="tab-menu" aria-controls="pane-menu" aria-selected="true">品項菜單</button>
       <button role="tab" id="tab-drip" aria-controls="pane-drip" aria-selected="false">濾掛價目表</button>
@@ -343,6 +351,7 @@ if(location.hash==='#drip'||location.hash.startsWith('#d-'))show('tab-drip');
     <div class="acts"><button class="btn" type="submit" id="send">送出訂單</button><button class="btn ghost" type="button" id="clr">清空購物車</button></div>
   </form>
   <div class="done" id="done" hidden>
+    <div class="okbox" id="okbox" hidden><div class="okicon">✓</div><p class="okt">訂單已送出成功！</p><p class="okno">訂單編號 <b id="okno"></b></p><p class="okamt">應付金額 <b id="okamt"></b><br><span id="okship"></span></p><p class="okshot">📸 請截圖這個畫面留存</p></div>
     <p class="ok" id="okmsg"></p>
     <p class="hint" id="okhint"></p>
     <textarea id="otext" readonly aria-label="訂單內容"></textarea>
@@ -394,7 +403,7 @@ document.addEventListener("click",e=>{
   save();refresh();
 });
 const dlg=document.getElementById("dlg"),f=document.getElementById("f"),done=document.getElementById("done");
-function openDlg(){f.hidden=false;done.hidden=true;document.getElementById("err").textContent="";refresh();dlg.showModal()}
+function openDlg(){document.querySelector(".dlg").classList.remove("sent");document.getElementById("dlg-h").firstChild.textContent="確認訂單 ";document.getElementById("okbox").hidden=true;document.getElementById("okhint").hidden=false;document.getElementById("okmsg").hidden=false;f.hidden=false;done.hidden=true;document.getElementById("err").textContent="";refresh();dlg.showModal()}
 document.getElementById("go").onclick=openDlg;
 document.getElementById("x").onclick=()=>dlg.close();
 dlg.addEventListener("close",refresh);
@@ -426,16 +435,19 @@ f.addEventListener("submit",async e=>{
   document.getElementById("otext").value=txt;
   const fb=document.getElementById("fb");
   const finish=()=>{
-    document.getElementById("okmsg").textContent="訂單已送出！訂單編號 "+no;
-    document.getElementById("okhint").textContent=sp.os?"海外寄送運費另計：請先按「複製訂單」，再按「私訊 IG」或「私訊臉書」，把訂單貼上傳給我們，我們會幫你計算運費並確認能不能寄送。":"謝謝你的訂購，我們確認訂單後會跟你聯絡付款方式。建議把下面的訂單內容截圖留存。";
+    document.querySelector(".dlg").classList.add("sent");document.getElementById("dlg-h").firstChild.textContent="下單完成 ";
+    document.getElementById("okmsg").classList.remove("warn");document.getElementById("okbox").hidden=false;document.getElementById("okhint").hidden=!sp.os;document.getElementById("okmsg").hidden=true;
+    document.getElementById("okno").textContent=no;document.getElementById("okamt").textContent=sp.os?fmt(t):fmt(t+sp.fee);
+    document.getElementById("okship").textContent=sp.os?"（海外運費另計）":"（含運費 "+(sp.fee?fmt(sp.fee):"免運")+"）";
+    document.getElementById("okhint").textContent=sp.os?"海外寄送運費另計：請先按「複製訂單」，再按「私訊 IG」或「私訊臉書」，把訂單貼上傳給我們，我們會幫你計算運費並確認能不能寄送。":"";
     fb.hidden=true;document.getElementById("back").hidden=true;document.getElementById("fin").hidden=false;
     document.getElementById("osSoc").hidden=!sp.os;
     for(const k in cart)delete cart[k];save();refresh();
   };
   if(sent)finish();
   else{
-    document.getElementById("okmsg").textContent="最後一步！";
-    document.getElementById("okhint").textContent="請確認下面的訂單內容沒問題，再按「確認送出」。會另外開啟 Google 的頁面，看到「已記錄你的回應」就完成下單了。";
+    const om=document.getElementById("okmsg");om.textContent="⚠️ 訂單還沒送出！";om.classList.add("warn");
+    document.getElementById("okhint").textContent="請按下面紅色的「確認送出」按鈕，會開啟 Google 的頁面，看到「已記錄你的回應」才算完成下單。";
     data.append("submit","Submit");fb.href=GF+"formResponse?"+data.toString();
     fb.onclick=()=>setTimeout(finish,300);
     fb.hidden=false;document.getElementById("back").hidden=false;document.getElementById("fin").hidden=true;
